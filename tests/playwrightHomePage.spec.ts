@@ -2,19 +2,17 @@
 
 import { test, expect, webkit, Page, chromium } from '@playwright/test';
 import { PlaywrightPage } from '../page/PlaywrightPage';
-import { PageFactory } from '../page/pageFactory';
-import { Pages } from '../page/Pages';
 import { PlaywrightHomePage } from '../page/PlaywrightHomePage';
 
 test.describe('Home page visibility tests', async () => {
   let page: Page;
-  let playwriteHomePage: any;
+  let playwriteHomePage: PlaywrightHomePage;
 
   test.beforeEach(async () => {
     const browser = await chromium.launch();
     const context = await browser.newContext();
     page = await context.newPage();
-    playwriteHomePage = PageFactory.createObject(Pages.Home, page);
+    playwriteHomePage = new PlaywrightHomePage(page);;
   });
 
   test.afterEach(async () => {
@@ -67,7 +65,7 @@ test.describe("Home page has specfic text", async () => {
     const browser = await chromium.launch();
     const context = await browser.newContext();
     page = await context.newPage();
-    playwriteHomePage = PageFactory.createObject(Pages.Home, page);
+    playwriteHomePage = new PlaywrightHomePage(page);;
   });
 
   test.afterEach(async () => {

@@ -5,7 +5,7 @@ import { PlaywrightPage } from './PlaywrightPage';
 
 export class PlaywrightHomePage extends PlaywrightPage{
   readonly getStartedLink: Locator;
-  
+
   constructor(page: Page) {
     super();
     this.page = page;

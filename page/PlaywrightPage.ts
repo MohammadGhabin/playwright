@@ -12,5 +12,5 @@ export abstract class PlaywrightPage {
     searchBoxInput: Locator
     footerCopyright: Locator
 
-    abstract goto();
+    abstract goto() : void;
 }

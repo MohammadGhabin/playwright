@@ -2,20 +2,17 @@
 
 import { test, expect, webkit, Page, chromium } from '@playwright/test';
 import { PlaywrightPage } from '../page/PlaywrightPage';
-import { PageFactory } from '../page/pageFactory';
-import { Pages } from '../page/Pages';
-import { PlaywrightHomePage } from '../page/PlaywrightHomePage';
 import { PlaywrightDocsPage } from '../page/PlaywrightDocsPage';
 
 test.describe('Docs page visibility tests', async () => {
   let page: Page;
-  let playwrightDocsPage: PlaywrightPage;
+  let playwrightDocsPage: PlaywrightDocsPage;
 
   test.beforeEach(async () => {
     const browser = await chromium.launch();
     const context = await browser.newContext();
     page = await context.newPage();
-    playwrightDocsPage = PageFactory.createObject(Pages.Docs, page);
+    playwrightDocsPage = new PlaywrightDocsPage(page);
   });
 
   test.afterEach(async () => {
@@ -64,7 +61,7 @@ test.describe("Docs page has specfic text", async () => {
     const browser = await chromium.launch();
     const context = await browser.newContext();
     page = await context.newPage();
-    playwrightDocsPage = PageFactory.createObject(Pages.Docs, page);
+    playwrightDocsPage = new PlaywrightDocsPage(page);;
   });
 
   test.afterEach(async () => {
