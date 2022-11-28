@@ -11,12 +11,4 @@ export abstract class BasePage {
     searchBoxView: Locator
     searchBoxInput: Locator
     footerCopyright: Locator
-
-    async goto(url: string){
-        await this.page.goto(url);
-    }
-
-    async clickSearchBotton(){
-        await this.searchBoxButton.click();
-    }
 }

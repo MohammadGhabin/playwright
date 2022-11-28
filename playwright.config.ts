@@ -45,6 +45,13 @@ const config: PlaywrightTestConfig = {
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'Microsoft Edge',
+      use: {
+        channel:'msedge',
+      },
+    },
+    /*
+    {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
@@ -64,7 +71,7 @@ const config: PlaywrightTestConfig = {
         ...devices['Desktop Safari'],
       },
     },
-
+    */
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',

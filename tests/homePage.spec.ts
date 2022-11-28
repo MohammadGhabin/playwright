@@ -1,27 +1,26 @@
 // homePage.spec.ts
 
-import { test, expect, webkit, Page, Browser, BrowserContext } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+import { SearchData } from '../Data/searchData';
 import { HomePage } from '../page/homePage';
 import { HomeSelectors } from '../selector/homeSelectors';
+import { Util } from '../utils/util';
 
 test.describe('Home page', async () => {
   let page: Page;
   let homePage: HomePage;
-  let browser: Browser;
-  let context: BrowserContext;
   let homeSelectors: HomeSelectors;
+  let util: Util;
+  let searchData: SearchData;
   const url = "https://playwright.dev/";
 
-  test.beforeAll(async () => {
-    browser = await webkit.launch();
-    context = await browser.newContext();
-  });
-
-  test.beforeEach(async () => {
-    page = await context.newPage();
+  test.beforeEach(async ({browser}) => {
+    page = await browser.newPage();
     homeSelectors = new HomeSelectors();
     homePage = new HomePage(page, homeSelectors);
-    await homePage.goto(url);
+    util = new Util(page);
+    searchData = new SearchData();
+    await page.goto(url, {waitUntil: "load"});
   });
   
   test('Navigation menu', async () => {
@@ -33,42 +32,43 @@ test.describe('Home page', async () => {
   });
   
   test('Search box view', async () => {
-    await homePage.clickSearchBotton();
+    await util.click(homePage.searchBoxButton, homeSelectors.searchBoxButton, "attached");
     await expect(homePage.searchBoxView).toBeVisible();
   });
 
   test('Search box input', async () => {
-    await homePage.clickSearchBotton();
+    await util.click(homePage.searchBoxButton, homeSelectors.searchBoxButton, "attached");
     await expect(homePage.searchBoxInput).toBeVisible();
   });
 
+  test('Search box result', async () => {
+    await util.click(homePage.searchBoxButton, homeSelectors.searchBoxButton, "attached");
+    await util.click(homePage.searchBoxInput, homeSelectors.searchBoxInput, "attached");
+    
+    for(var val of searchData.commonData){
+      await homePage.searchBoxInput.fill(val[0]);
+      expect(await page.waitForSelector(val[1]))
+    }
+  });
+
   test('Header', async () => {
-    await homePage.goto(url);
     await expect(homePage.header).toBeVisible();
   });
 
   test('Footer', async () => {
-    await homePage.goto(url);
     await expect(homePage.footer).toBeVisible();
   });
 
   test('Get started link', async () => {
-    await homePage.goto(url);
     await expect(homePage.getStartedLink).toBeVisible();
   });
 
   test('footer Copywrite text', async () => {
-    await homePage.goto(url);
     await expect(homePage.footerCopyright).toHaveText("Copyright © 2022 Microsoft");
   });
 
   test.afterEach(async () => {
     await page.close();
   })
-
-  test.afterAll(async () => {
-    await context.close();
-    await browser.close();
-  });
   
 });

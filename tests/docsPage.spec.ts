@@ -1,27 +1,26 @@
 // docsPage.spec.ts
 
-import { test, expect, webkit, Page, Browser, BrowserContext } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+import { SearchData } from '../Data/searchData';
 import { DocsPage } from '../page/docsPage';
 import { DocsSelectors } from '../selector/docsSelectors';
+import { Util } from '../utils/util';
 
 test.describe('Docs page', async () => {
   let page: Page;
   let docsPage: DocsPage;
-  let browser : Browser;
-  let context : BrowserContext;
   let docsSelectors : DocsSelectors;
+  let util: Util;
+  let searchData: SearchData;
   const url = "https://playwright.dev/docs/intro";
 
-  test.beforeAll(async () => {
-    browser = await webkit.launch();
-    context = await browser.newContext();
-  });
-
-  test.beforeEach(async () => {
-    page = await context.newPage();
+  test.beforeEach(async ({browser}) => {
+    page = await browser.newPage();
     docsSelectors = new DocsSelectors();
     docsPage = new DocsPage(page, docsSelectors);
-    await docsPage.goto(url);
+    util = new Util(page);
+    searchData = new SearchData();
+    await page.goto(url, {waitUntil:"load"})
   });
   
   test('Navigation menu', async () => {
@@ -33,13 +32,23 @@ test.describe('Docs page', async () => {
   });
   
   test('Search box view', async () => {
-    await docsPage.clickSearchBotton();
+    await util.click(docsPage.searchBoxButton, docsSelectors.searchBoxButton, "attached");
     await expect(docsPage.searchBoxView).toBeVisible();
   });
 
   test('Search box input', async () => {
-    await docsPage.clickSearchBotton();
+    await util.click(docsPage.searchBoxButton, docsSelectors.searchBoxButton, "attached");
     await expect(docsPage.searchBoxInput).toBeVisible();
+  });
+
+  test('Search box result', async () => {
+    await util.click(docsPage.searchBoxButton, docsSelectors.searchBoxButton, "attached");
+    await util.click(docsPage.searchBoxInput, docsSelectors.searchBoxInput, "attached");
+    
+    for(var val of searchData.commonData){
+      await docsPage.searchBoxInput.fill(val[0]);
+      expect(await page.waitForSelector(val[1]))
+    }
   });
 
   test('Header', async () => {
@@ -56,11 +65,6 @@ test.describe('Docs page', async () => {
 
   test.afterEach(async () => {
     await page.close();
-  });
-
-  test.afterAll(async () => {
-    await context.close();
-    await browser.close();
   });
 
 });
