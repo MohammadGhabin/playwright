@@ -1,8 +1,8 @@
-// PlaywrightPage.ts
+// basePage.ts
 
 import { Locator, Page } from "@playwright/test"
 
-export abstract class PlaywrightPage {
+export abstract class BasePage {
     page: Page
     navigationMenu: Locator
     header: Locator
@@ -11,6 +11,4 @@ export abstract class PlaywrightPage {
     searchBoxView: Locator
     searchBoxInput: Locator
     footerCopyright: Locator
-
-    abstract goto() : void;
 }
