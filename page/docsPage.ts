@@ -2,7 +2,7 @@
 
 import { Locator, Page } from '@playwright/test';
 import { DocsSelectors } from '../selector/docsSelectors';
-import { BasePage } from './BasePage';
+import { BasePage } from './basePage';
 
 export class DocsPage extends BasePage{
   readonly pomLink: Locator;
