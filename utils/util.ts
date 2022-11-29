@@ -9,8 +9,12 @@ export class Util{
         this.page = page;
     }
 
-    async click(locator: Locator, selector: string, nextState: "attached" | "visible"){
+    async click(locator: Locator, selector: string, nextState: "attached" | "detached" | "visible" | "hidden" | undefined){
         await locator.click();
         await this.page.waitForSelector(selector, {state: nextState})
+    }
+
+    async goto(url: string, waitUntil: "load" | "domcontentloaded" | "networkidle" | "commit" | undefined){
+        await this.page.goto(url, {waitUntil: waitUntil});
     }
 }

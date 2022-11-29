@@ -20,7 +20,7 @@ test.describe('Home page', async () => {
     homePage = new HomePage(page, homeSelectors);
     util = new Util(page);
     searchData = new SearchData();
-    await page.goto(url, {waitUntil: "load"});
+    await util.goto(url, "load");
   });
   
   test('Navigation menu', async () => {

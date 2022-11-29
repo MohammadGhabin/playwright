@@ -20,7 +20,7 @@ test.describe('Docs page', async () => {
     docsPage = new DocsPage(page, docsSelectors);
     util = new Util(page);
     searchData = new SearchData();
-    await page.goto(url, {waitUntil:"load"})
+    await util.goto(url, "load")
   });
   
   test('Navigation menu', async () => {
